@@ -14,6 +14,7 @@ public class Node {
 
     //public BufferedImage sprite;
     public Point nodePosition;
+    public Point nodeCenterPosition;
     public PhysicsBody physicsBody;
     public Rectangle hitBox;
     public String name = "";
@@ -22,6 +23,7 @@ public class Node {
         //this.sprite = null;
         hitBox = new Rectangle(x, y, 0, 0);
         nodePosition = new Point(x, y);
+        nodeCenterPosition = new Point(this.nodePosition.x + hitBox.width / 2, this.nodePosition.y + this.hitBox.height / 2);
         physicsBody = new PhysicsBody(10);
 
     }
@@ -30,9 +32,13 @@ public class Node {
         this.physicsBody.update();
         //this.spritePosition.y += this.physicsBody.yVelocity;
         //this.physicsBody.gravityForce(this.spritePosition);
+
         this.nodePosition.y = (int)this.physicsBody.gravityForce(this.nodePosition);
         this.hitBox.x = this.nodePosition.x;
         this.hitBox.y = this.nodePosition.y;
+        this.nodeCenterPosition.x = this.nodePosition.x + hitBox.width / 2;
+        this.nodeCenterPosition.y = this.nodePosition.y - this.hitBox.height / 2;
+
     }
 
 

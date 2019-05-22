@@ -35,6 +35,8 @@ public class SpriteNode extends Node {
     public void render(Graphics g) {
         super.render(g);
         g.drawImage(sprite, (int) this.nodePosition.getX(), (int) this.nodePosition.getY(), null);
+        //g.setColor(Color.white);
+        //g.drawString("angle: ", 700, 100);
         g.dispose();
     }
 

@@ -136,7 +136,7 @@ public class Engine extends Canvas implements Runnable{
     public void render(int ticks) {
         g = bs.getDrawGraphics();
         g.setColor(Color.black);
-        //g.fillRect(0,0, WIDTH, HEIGHT);
+        g.fillRect(0,0, WIDTH, HEIGHT);
         //g.setColor(Color.black);
 
 

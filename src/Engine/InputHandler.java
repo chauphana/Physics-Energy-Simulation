@@ -12,6 +12,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     public boolean facingRight;
     public boolean isWalking;
     public Point mouseClickPos;
+    public Point mousePos;
     public Point playerPos;
     public Point slopePoint;
     public Point cMoneyLoc;
@@ -174,7 +175,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
         //System.out.println("draggggg");
         if (springContainsPoint(mouseClickPos) || engine.spring.isDragging) {
             engine.spring.isDragging = true;
-            if (engine.spring.calcDistanceFromEquilibrium() <= 500) {
+            if (engine.spring.calcDistanceFromEquilibrium() <= 1000) {
                 Point adjustedPoint = new Point();
                 adjustedPoint.x = mouseClickPos.x - (engine.spring.sprite.getWidth() / 2);
                 adjustedPoint.y = mouseClickPos.y - (engine.spring.sprite.getHeight() / 2);
@@ -192,7 +193,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        System.out.println("movingggg");
+        this.mousePos = new Point(e.getX(), e.getY());
     }
 
     public boolean springContainsPoint(Point mouseClickPos) {
