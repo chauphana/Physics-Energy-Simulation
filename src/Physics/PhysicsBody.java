@@ -9,14 +9,15 @@ public class PhysicsBody extends PhysicsWorld {
     public Boolean affectedByGravity;
     public Boolean allowRotation;
     public Boolean isPinned;
-    public boolean isDynamic;
+    public Boolean isDynamic; //Dynamic, can be moved by other objects during collisions
+    public Boolean isStatic; //Static, cannot be moved by the player with mouse
 
     public double xVelocity;
     public double yVelocity;
 
-    public int categoryID = 999; //Numerical identifier for a node
-    public ArrayList<Integer> contactID;
-    public ArrayList<Integer> collision;
+    public int categoryID; //Numerical identifier for a node
+    public ArrayList<Integer> contactIDs;
+    public ArrayList<Integer> collisionIDs;
 
     public PhysicsBody (double mass) {
         super();
@@ -25,18 +26,23 @@ public class PhysicsBody extends PhysicsWorld {
         this.allowRotation = true;
         this.isPinned = false;
         this.isDynamic = true;
+        this.isStatic = true;
 
         this.xVelocity = 0;
         this.yVelocity = 0;
+
+        this.categoryID = (int)Math.random() * 1000;
+        this.contactIDs = new ArrayList<>();
+        this.collisionIDs = new ArrayList<>();
+
 
     }
 
     public void update() {
 
-
-
-
     }
+
+
 
     public double gravityForce(Point initialPoint) {
         double finalY = initialPoint.y;

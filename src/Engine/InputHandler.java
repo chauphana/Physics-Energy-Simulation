@@ -2,9 +2,11 @@ package Engine;
 
 //import Utility.Point;
 import Engine.Engine;
+import Nodes.*;
 
+import javax.swing.*;
 import java.awt.Point;
-        import java.awt.event.*;
+import java.awt.event.*;
 
 
 public class InputHandler implements KeyListener, MouseListener, MouseMotionListener {
@@ -17,6 +19,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     public Point slopePoint;
     public Point cMoneyLoc;
     public Point vaultLoc;
+    public Node selectedNode;
     public Boolean isDragging = false;
 
     public int index;
@@ -112,9 +115,17 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     public void mouseClicked(MouseEvent e) {
         mouseClickPos = new Point(e.getX(), e.getY());
         System.out.println("Mouse Clicked at: " + e.getX() + ", " + e.getY());
-//        this.isDragging = true;
-//        clickedSpring(mouseClickPos);
 
+        for (Node node : engine.nodeList) {
+            if (node.hitBox.contains(mouseClickPos)) {
+                this.selectedNode = node;
+                System.out.println("selected node " + selectedNode.name);
+            }
+
+            if (!node.physicsBody.isStatic) {
+                node.isDragging = true;
+            }
+        }
 
 
 
@@ -154,16 +165,22 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     }
 
     public void mouseReleased(MouseEvent e) {
-        if (engine.spring.isDragging) {
-            engine.spring.isDragging = false;
+        //this.selectedNode = null;
+        for (Node node : engine.nodeList) {
+            if (node.isDragging) {
+                node.isDragging = false;
+                System.out.println(node.name);
+                if (node.name == "spring") {
+                    Point adjustedPoint = new Point();
+                    adjustedPoint.x = engine.spring.initialPosition.x - (engine.spring.sprite.getWidth() / 2);
+                    adjustedPoint.y = engine.spring.initialPosition.y - (engine.spring.sprite.getHeight() / 2);
+                    engine.spring.nodePosition = adjustedPoint;
+                }
 
-            Point adjustedPoint = new Point();
-            adjustedPoint.x = engine.spring.initialPosition.x - (engine.spring.sprite.getWidth() / 2);
-            adjustedPoint.y = engine.spring.initialPosition.y - (engine.spring.sprite.getHeight() / 2);
-
-            engine.spring.nodePosition = adjustedPoint;
-
+            }
         }
+
+
     }
 
     public void mouseEntered(MouseEvent e) {
@@ -177,18 +194,24 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     @Override
     public void mouseDragged(MouseEvent e) {
         mouseClickPos = new Point(e.getX(), e.getY());
-        //System.out.println("draggggg");
-        if (springContainsPoint(mouseClickPos) || engine.spring.isDragging) {
-            engine.spring.isDragging = true;
-            if (engine.spring.calcDistanceFromEquilibrium() <= 1000) {
+
+        for (Node node : engine.nodeList) {
+            if ((node.isDragging || node.containsPoint(mouseClickPos)) && node.equals(selectedNode) ) {
+                node.isDragging = true;
                 Point adjustedPoint = new Point();
-                adjustedPoint.x = mouseClickPos.x - (engine.spring.sprite.getWidth() / 2);
-                adjustedPoint.y = mouseClickPos.y - (engine.spring.sprite.getHeight() / 2);
-                engine.spring.nodePosition = adjustedPoint;
+                adjustedPoint.x = mouseClickPos.x - (node.hitBox.width / 2);
+                adjustedPoint.y = mouseClickPos.y - (node.hitBox.height / 2);
+
+                if (node instanceof SpringNode) {
+                    if (((SpringNode) node).calcDistanceFromEquilibrium() <= 500) {
+                        node.nodePosition = adjustedPoint;
+                    }
+                } else {
+                    node.nodePosition = adjustedPoint;
+                }
+
+
             }
-
-
-
         }
 
 

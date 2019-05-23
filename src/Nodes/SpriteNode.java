@@ -28,7 +28,6 @@ public class SpriteNode extends Node {
 
     public void update(int ticks) {
         super.update(ticks);
-
     }
 
 
@@ -37,7 +36,7 @@ public class SpriteNode extends Node {
         g.drawImage(sprite, (int) this.nodePosition.getX(), (int) this.nodePosition.getY(), null);
         //g.setColor(Color.white);
         //g.drawString("angle: ", 700, 100);
-        g.dispose();
+        //g.dispose();
     }
 
 

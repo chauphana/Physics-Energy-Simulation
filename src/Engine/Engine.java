@@ -46,14 +46,10 @@ public class Engine extends Canvas implements Runnable{
             bs = getBufferStrategy();
         }
         g = bs.getDrawGraphics();
-
-        spring = new SpringNode("ball1.jpg", 100, 100, this);
-        spring.physicsBody.affectedByGravity = false;
-        spring.name = "spring";
-        nodeList.add(spring);
-
-
+        createNodes();
     }
+
+
 
 
     public static void main(String[] args) {
@@ -67,6 +63,27 @@ public class Engine extends Canvas implements Runnable{
 
     public synchronized void stop() {
         running = false;
+    }
+
+    public void createNodes() {
+
+
+        spring = new SpringNode("ball1.jpg", 100, 100, this);
+        spring.physicsBody.affectedByGravity = false;
+        spring.name = "spring";
+        nodeList.add(spring);
+
+        SpriteNode testNode1 = new SpriteNode("flower.png", 400, 300);
+        testNode1.physicsBody.affectedByGravity = false;
+        testNode1.name = "flower";
+        testNode1.physicsBody.isStatic = false;
+        nodeList.add(testNode1);
+
+        testNode1 = new SpriteNode("Earth.jpg", 600, 100);
+        testNode1.physicsBody.affectedByGravity = false;
+        testNode1.name = "earth";
+        testNode1.physicsBody.isStatic = false;
+        nodeList.add(testNode1);
     }
 
 
@@ -129,7 +146,24 @@ public class Engine extends Canvas implements Runnable{
         for (Node item : nodeList) {
             item.update(ticks);
         }
+        checkCollisions();
     }
+
+    public void checkCollisions() {
+        Node nodeA;
+        Node nodeB;
+        for(int indexA = 0; indexA < nodeList.size(); indexA++) {
+            nodeA = nodeList.get(indexA);
+            for(int indexB = indexA + 1; indexB < nodeList.size(); indexB++) {
+                nodeB = nodeList.get(indexB);
+                if (nodeA.hitBox.intersects(nodeB.hitBox)) {
+                   //System.out.println("COLLIDED");
+                }
+
+            }
+        }
+    }
+
 
 
 
@@ -146,9 +180,11 @@ public class Engine extends Canvas implements Runnable{
 //
 //        g.fillOval(0,0,50,50);
 //        g.setColor(Color.RED);
-
+        //int test = 0;
         for (Node item : nodeList) {
+            //System.out.println(test);
             item.render(g);
+            //test++;
         }
        // repaint();
 
