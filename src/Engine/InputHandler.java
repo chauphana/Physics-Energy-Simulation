@@ -110,8 +110,8 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 
 
     public void mouseClicked(MouseEvent e) {
-//        mouseClickPos = new Point(e.getX(), e.getY());
-//        System.out.println("Mouse Clicked at: " + e.getX() + ", " + e.getY());
+        mouseClickPos = new Point(e.getX(), e.getY());
+        System.out.println("Mouse Clicked at: " + e.getX() + ", " + e.getY());
 //        this.isDragging = true;
 //        clickedSpring(mouseClickPos);
 
@@ -156,7 +156,12 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     public void mouseReleased(MouseEvent e) {
         if (engine.spring.isDragging) {
             engine.spring.isDragging = false;
-            engine.spring.nodePosition = engine.spring.initialPosition;
+
+            Point adjustedPoint = new Point();
+            adjustedPoint.x = engine.spring.initialPosition.x - (engine.spring.sprite.getWidth() / 2);
+            adjustedPoint.y = engine.spring.initialPosition.y - (engine.spring.sprite.getHeight() / 2);
+
+            engine.spring.nodePosition = adjustedPoint;
 
         }
     }

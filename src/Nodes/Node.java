@@ -37,7 +37,7 @@ public class Node {
         this.hitBox.x = this.nodePosition.x;
         this.hitBox.y = this.nodePosition.y;
         this.nodeCenterPosition.x = this.nodePosition.x + hitBox.width / 2;
-        this.nodeCenterPosition.y = this.nodePosition.y - this.hitBox.height / 2;
+        this.nodeCenterPosition.y = this.nodePosition.y + this.hitBox.height / 2;
 
     }
 

@@ -16,7 +16,8 @@ public class SpringNode extends SpriteNode {
 
     public SpringNode(String imagePath, int x, int y, Engine e) {
         super(imagePath, x, y);
-        this.initialPosition = new Point(x, y);
+        this.initialPosition = new Point(this.nodePosition.x + this.hitBox.width / 2, this.nodePosition.y + this.hitBox.height / 2);
+        //System.out.println("changechangechangechangechangechangechangechangechangechangechangechangechangechangechangechangechangechangechangechangechangechangechangechangechangechangechange");
         this.isDragging = false;
         this.e = e;
         this.angle = 0;
@@ -35,7 +36,7 @@ public class SpringNode extends SpriteNode {
         //g.setColor(Color.white);
 
         //g.fillRect(400, 400, 300, 300);
-        System.out.println("he");
+        //System.out.println("he");
         //g.dispose();
 
     }
@@ -49,12 +50,12 @@ public class SpringNode extends SpriteNode {
     }
 
     public void updateAngle() {
-        if (this.isDragging) {
+        if (this.isDragging || !this.isDragging) {
             //System.out.println("mousePos: " + e.inputHandler.mouseClickPos.toString() + "initialPos: " + this.initialPosition.toString());
             System.out.println("mousePos: " + this.nodeCenterPosition.toString() + "initialPos: " + this.initialPosition.toString());
-            this.angle = Math.atan2(this.nodeCenterPosition.y + this.initialPosition.y, this.nodeCenterPosition.x - this.initialPosition.x);
+            this.angle = Math.toDegrees(Math.atan2(this.nodeCenterPosition.y + this.initialPosition.y, this.nodeCenterPosition.x - this.initialPosition.x));
             System.out.println("dif: " + (this.nodeCenterPosition.y - this.initialPosition.y) + " " + (this.nodeCenterPosition.x - this.initialPosition.x));
-            System.out.println(Math.toDegrees(this.angle));
+            //System.out.println(Math.toDegrees(this.angle));
             System.out.println(this.angle);
         }
 
