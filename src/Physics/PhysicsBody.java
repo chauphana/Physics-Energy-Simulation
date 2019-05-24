@@ -1,6 +1,7 @@
 package Physics;
 import java.awt.Point;
 import java.util.ArrayList;
+import Nodes.*;
 
 
 public class PhysicsBody extends PhysicsWorld {
@@ -19,10 +20,15 @@ public class PhysicsBody extends PhysicsWorld {
     public ArrayList<Integer> contactIDs;
     public ArrayList<Integer> collisionIDs;
 
-    public PhysicsBody (double mass) {
+    public Point referencePosition;
+
+    public PhysicsBody (double mass, Point refPos) {
         super();
+        //System.out.println("ass");
         this.mass = mass;
-        this.affectedByGravity = true;
+        this.referencePosition = refPos;
+
+        this.affectedByGravity = false;
         this.allowRotation = true;
         this.isPinned = false;
         this.isDynamic = true;
@@ -36,9 +42,11 @@ public class PhysicsBody extends PhysicsWorld {
         this.collisionIDs = new ArrayList<>();
 
 
+
+
     }
 
-    public void update() {
+    public void update(int ticks) {
 
     }
 
@@ -55,7 +63,23 @@ public class PhysicsBody extends PhysicsWorld {
         }
     }
 
-    public void updateVelocity() {
+    //Called Specifically from the node and not this update method
+    public void updateVelocity(Node node, int ticks) {
+        if (node.name == "flower") {
+            System.out.println(referencePosition.toString());
+        }
+
+//        if (node.name == "flower") {
+//            Point currentPosition = node.nodeCenterPosition;
+//            System.out.println("ref: " + this.referencePosition.toString() + " current: " + currentPosition.toString());
+//
+//            if (currentPosition.x != referencePosition.x || currentPosition.y != referencePosition.y) {
+//                System.out.println(node.name + " moved");
+//                referencePosition = currentPosition;
+//            }
+//        }
+
+
 
     }
 

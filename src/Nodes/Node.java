@@ -26,10 +26,8 @@ public class Node {
         this.hitBox = new Rectangle(x, y, 0, 0);
         this.nodePosition = new Point(x, y);
         this.nodeCenterPosition = new Point(this.nodePosition.x + hitBox.width / 2, this.nodePosition.y + this.hitBox.height / 2);
-        this.physicsBody = new PhysicsBody(10);
+        this.physicsBody = new PhysicsBody(10, this.nodeCenterPosition);
         this.isDragging = false;
-
-
     }
 
     public Boolean containsPoint(Point point) {
@@ -38,7 +36,8 @@ public class Node {
 
 
     public void update(int ticks) {
-        this.physicsBody.update();
+        this.physicsBody.update(ticks);
+        this.physicsBody.updateVelocity(this, ticks);
         //this.spritePosition.y += this.physicsBody.yVelocity;
         //this.physicsBody.gravityForce(this.spritePosition);
 

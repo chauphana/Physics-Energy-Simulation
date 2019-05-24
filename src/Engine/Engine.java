@@ -8,8 +8,8 @@ import Nodes.*;
 
 public class Engine extends Canvas implements Runnable{
 
-    private final int WIDTH = 800;
-    private final int HEIGHT = 800;
+    private final int WIDTH = 1200;
+    private final int HEIGHT = 600;
 
     public Boolean running = false;
     public Graphics g;
@@ -27,7 +27,7 @@ public class Engine extends Canvas implements Runnable{
         setMaximumSize(new Dimension(WIDTH, HEIGHT));
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
-        frame = new JFrame("Window");
+        frame = new JFrame("Sim");
         frame.setSize(new Dimension(800, 600));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(this);
@@ -69,21 +69,35 @@ public class Engine extends Canvas implements Runnable{
 
 
         spring = new SpringNode("ball1.jpg", 100, 100, this);
-        spring.physicsBody.affectedByGravity = false;
         spring.name = "spring";
         nodeList.add(spring);
 
         SpriteNode testNode1 = new SpriteNode("flower.png", 400, 300);
-        testNode1.physicsBody.affectedByGravity = false;
         testNode1.name = "flower";
         testNode1.physicsBody.isStatic = false;
         nodeList.add(testNode1);
 
         testNode1 = new SpriteNode("Earth.jpg", 600, 100);
-        testNode1.physicsBody.affectedByGravity = false;
         testNode1.name = "earth";
         testNode1.physicsBody.isStatic = false;
         nodeList.add(testNode1);
+
+        Node baseNode = new Node(400, 500);
+        baseNode.name = "base";
+        baseNode.hitBox.width = 10;
+        baseNode.hitBox.height  = 20;
+        baseNode.physicsBody.isStatic = false;
+        nodeList.add(baseNode);
+
+        baseNode = new Node(1100, 50);
+        baseNode.physicsBody.affectedByGravity = true;
+        baseNode.name = "base2";
+        baseNode.hitBox.width = 100;
+        baseNode.hitBox.height  = 20;
+        baseNode.physicsBody.isStatic = false;
+        nodeList.add(baseNode);
+
+
     }
 
 
@@ -145,8 +159,18 @@ public class Engine extends Canvas implements Runnable{
     public void tick(int ticks) {
         for (Node item : nodeList) {
             item.update(ticks);
+
+            if (item.name == "base2" && (item.nodePosition.y > this.getHeight())) {
+                item.nodePosition.y = 50;
+                item.physicsBody.yVelocity = 0;
+            }
+
         }
         checkCollisions();
+
+
+
+
     }
 
     public void checkCollisions() {

@@ -116,16 +116,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
         mouseClickPos = new Point(e.getX(), e.getY());
         System.out.println("Mouse Clicked at: " + e.getX() + ", " + e.getY());
 
-        for (Node node : engine.nodeList) {
-            if (node.hitBox.contains(mouseClickPos)) {
-                this.selectedNode = node;
-                System.out.println("selected node " + selectedNode.name);
-            }
 
-            if (!node.physicsBody.isStatic) {
-                node.isDragging = true;
-            }
-        }
 
 
 
@@ -162,14 +153,23 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
         //this.isDragging = true;
         //clickedSpring(mouseClickPos);
 
+        for (Node node : engine.nodeList) {
+            if (node.hitBox.contains(mouseClickPos)) {
+                this.selectedNode = node;
+                System.out.println("selected node " + selectedNode.name);
+            }
+            if (!node.physicsBody.isStatic) {
+                node.isDragging = true;
+            }
+        }
+
     }
 
     public void mouseReleased(MouseEvent e) {
-        //this.selectedNode = null;
+        this.selectedNode = null;
         for (Node node : engine.nodeList) {
-            if (node.isDragging) {
-                node.isDragging = false;
-                System.out.println(node.name);
+            node.isDragging = false;
+
                 if (node.name == "spring") {
                     Point adjustedPoint = new Point();
                     adjustedPoint.x = engine.spring.initialPosition.x - (engine.spring.sprite.getWidth() / 2);
@@ -177,7 +177,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
                     engine.spring.nodePosition = adjustedPoint;
                 }
 
-            }
+
         }
 
 
@@ -209,8 +209,6 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
                 } else {
                     node.nodePosition = adjustedPoint;
                 }
-
-
             }
         }
 
@@ -224,9 +222,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
         this.mousePos = new Point(e.getX(), e.getY());
     }
 
-    public boolean springContainsPoint(Point mouseClickPos) {
-        return engine.spring.hitBox.contains(mouseClickPos);
-    }
+
 
 
 }

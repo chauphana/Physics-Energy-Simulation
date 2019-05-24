@@ -7,7 +7,7 @@ public class PhysicsWorld {
 
 
     public PhysicsWorld() {
-        this.gravity = 9.8;
+        this.gravity = 4.9;
     }
 
 }
