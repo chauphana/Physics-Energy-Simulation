@@ -13,6 +13,7 @@ public class PhysicsBody extends PhysicsWorld {
     public Boolean isDynamic; //Dynamic, can be moved by other objects during collisions
     public Boolean isStatic; //Static, cannot be moved by the player with mouse
 
+    public double velocity;
     public double xVelocity;
     public double yVelocity;
 
@@ -34,6 +35,7 @@ public class PhysicsBody extends PhysicsWorld {
         this.isDynamic = true;
         this.isStatic = true;
 
+        this.velocity = 80;
         this.xVelocity = 0;
         this.yVelocity = 0;
 
@@ -49,6 +51,13 @@ public class PhysicsBody extends PhysicsWorld {
     public void update(int ticks) {
 
     }
+
+    public void updatePosWithVelocity(Node node) {
+        node.nodePosition.x += this.xVelocity;
+        //node.nodePosition.y -= this.yVelocity;
+
+    }
+
 
 
 
@@ -66,7 +75,7 @@ public class PhysicsBody extends PhysicsWorld {
     //Called Specifically from the node and not this update method
     public void updateVelocity(Node node, int ticks) {
         if (node.name == "flower") {
-            System.out.println(referencePosition.toString());
+            //System.out.println(referencePosition.toString());
         }
 
 //        if (node.name == "flower") {

@@ -21,6 +21,9 @@ public class Node {
 
     public String name = "";
 
+    public Color color = Color.red;
+
+
     public Node(int x, int y) {
         //this.sprite = null;
         this.hitBox = new Rectangle(x, y, 0, 0);
@@ -28,6 +31,7 @@ public class Node {
         this.nodeCenterPosition = new Point(this.nodePosition.x + hitBox.width / 2, this.nodePosition.y + this.hitBox.height / 2);
         this.physicsBody = new PhysicsBody(10, this.nodeCenterPosition);
         this.isDragging = false;
+
     }
 
     public Boolean containsPoint(Point point) {
@@ -51,7 +55,7 @@ public class Node {
 
 
     public void render(Graphics g) {
-        g.setColor(Color.red);
+        g.setColor(color);
         g.fillRect(this.nodePosition.x - 10, this.nodePosition.y - 10,hitBox.width + 20, hitBox.height + 20);
         //change fillRect to just Rect to have invis rectangle
         //g.dispose();

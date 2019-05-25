@@ -166,21 +166,20 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     }
 
     public void mouseReleased(MouseEvent e) {
-        this.selectedNode = null;
         for (Node node : engine.nodeList) {
             node.isDragging = false;
-
-                if (node.name == "spring") {
-                    Point adjustedPoint = new Point();
-                    adjustedPoint.x = engine.spring.initialPosition.x - (engine.spring.sprite.getWidth() / 2);
-                    adjustedPoint.y = engine.spring.initialPosition.y - (engine.spring.sprite.getHeight() / 2);
-                    engine.spring.nodePosition = adjustedPoint;
+            if (node.name == "spring" && this.selectedNode == node) {
+                Point adjustedPoint = new Point();
+                adjustedPoint.x = engine.spring.initialPosition.x - (engine.spring.sprite.getWidth() / 2);
+                adjustedPoint.y = engine.spring.initialPosition.y - (engine.spring.sprite.getHeight() / 2);
+                engine.spring.nodePosition = adjustedPoint;
+                if (node instanceof SpringNode) {
+                    double x = ((SpringNode) node).calcDistanceFromEquilibrium();
+                    ((SpringNode) node).launchProjectile();
                 }
-
-
+            }
         }
-
-
+        this.selectedNode = null;
     }
 
     public void mouseEntered(MouseEvent e) {
@@ -203,7 +202,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
                 adjustedPoint.y = mouseClickPos.y - (node.hitBox.height / 2);
 
                 if (node instanceof SpringNode) {
-                    if (((SpringNode) node).calcDistanceFromEquilibrium() <= 500) {
+                    if (((SpringNode) node).calcDistanceFromEquilibrium() <= 1000) {
                         node.nodePosition = adjustedPoint;
                     }
                 } else {
