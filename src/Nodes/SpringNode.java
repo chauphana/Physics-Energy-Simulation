@@ -9,11 +9,12 @@ public class SpringNode extends SpriteNode {
     public Engine e;
 
     public final int SPRING_CONSTANT = 30;
-    public int maxSpringDisplacement = 200;
+    public int maxSpringDisplacement = 120;
     public Point initialPosition;
     //public Boolean isDragging;
     public double angle;
     public final ArrayList<Node> projectileList;
+    public double projectileMass;
 
 
     public SpringNode(String imagePath, int x, int y, Engine e) {
@@ -25,22 +26,25 @@ public class SpringNode extends SpriteNode {
         this.angle = 0;
 
         projectileList = new ArrayList<Node>();
+        projectileMass = 50;
 
     }
 
-    public void launchProjectile() {
+    public void launchProjectile(double velMagnitude) {
        double launchAngle = -this.angle;
-       Node projectile = new Node(this.nodeCenterPosition.x , this.nodeCenterPosition.y);
+       Node projectile = new Node(this.initialPosition.x , this.initialPosition.y);
        projectile.hitBox.width = 30;
        projectile.hitBox.height = 30;
        projectile.color = Color.blue;
-
+       projectile.physicsBody.categoryID = 1;
+       projectile.physicsBody.velocity = velMagnitude;
        //projectile.physicsBody.yVelocity = 90;
        System.out.println("xVel: " + projectile.physicsBody.velocity * Math.cos(3.14159 - this.angle));
-       System.out.println("yVel: " + projectile.physicsBody.velocity * Math.sin(3.14159 - this.angle));
+       System.out.println("yVel: " + -projectile.physicsBody.velocity * Math.sin(3.14159 - this.angle));
        projectile.physicsBody.xVelocity = projectile.physicsBody.velocity * Math.cos(3.14159 - this.angle);
        projectile.physicsBody.yVelocity = -projectile.physicsBody.velocity * Math.sin(3.14159 - this.angle);
-       projectile.physicsBody.mass = 50;
+       projectile.physicsBody.mass = projectileMass;
+
        projectile.physicsBody.affectedByGravity = true;
 
        projectileList.add(projectile);
@@ -55,16 +59,20 @@ public class SpringNode extends SpriteNode {
         for (Node node : projectileList) {
             node.update(ticks);
             node.physicsBody.updatePosWithVelocity(node);
+            if (node.nodeCenterPosition.y > 600) {
+                projectileList.remove(node);
+                break;
+            }
         }
     }
 
     //@Override
     public void render(Graphics g) {
         super.render(g);
-        g.setColor(Color.GREEN);
+        g.setColor(Color.gray);
         g.drawLine(this.initialPosition.x, this.initialPosition.y, this.nodeCenterPosition.x, this.nodeCenterPosition.y);
         g.setColor(Color.red);
-        g.drawString("angle: "+ Math.toDegrees(this.angle), 700, 100);
+        g.drawString("angle: "+ Math.toDegrees(3.14 - this.angle), 700, 100);
 
 
         for (Node node : projectileList) {

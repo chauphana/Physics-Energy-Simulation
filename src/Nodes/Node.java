@@ -17,6 +17,7 @@ public class Node {
     public Point nodeCenterPosition;
     public PhysicsBody physicsBody;
     public Rectangle hitBox;
+    public Boolean drawHitbox;
     public Boolean isDragging;
 
     public String name = "";
@@ -31,6 +32,7 @@ public class Node {
         this.nodeCenterPosition = new Point(this.nodePosition.x + hitBox.width / 2, this.nodePosition.y + this.hitBox.height / 2);
         this.physicsBody = new PhysicsBody(10, this.nodeCenterPosition);
         this.isDragging = false;
+        this.drawHitbox = true;
 
     }
 
@@ -56,7 +58,12 @@ public class Node {
 
     public void render(Graphics g) {
         g.setColor(color);
-        g.fillRect(this.nodePosition.x - 10, this.nodePosition.y - 10,hitBox.width + 20, hitBox.height + 20);
+        //g.fillRect(this.nodePosition.x - 10, this.nodePosition.y - 10,hitBox.width + 20, hitBox.height + 20);
+        if (this.drawHitbox) {
+            g.fillRect(this.nodePosition.x, this.nodePosition.y,hitBox.width, hitBox.height);
+        }
+
+        //g.fillRect(this.nodePosition.x, this.nodePosition.y,hitBox.width, hitBox.height);
         //change fillRect to just Rect to have invis rectangle
         //g.dispose();
 

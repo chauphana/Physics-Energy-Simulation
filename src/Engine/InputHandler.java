@@ -154,7 +154,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
         //clickedSpring(mouseClickPos);
 
         for (Node node : engine.nodeList) {
-            if (node.hitBox.contains(mouseClickPos)) {
+            if (node.hitBox.contains(mouseClickPos) && !node.physicsBody.isStatic) {
                 this.selectedNode = node;
                 System.out.println("selected node " + selectedNode.name);
             }
@@ -174,8 +174,11 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
                 adjustedPoint.y = engine.spring.initialPosition.y - (engine.spring.sprite.getHeight() / 2);
                 engine.spring.nodePosition = adjustedPoint;
                 if (node instanceof SpringNode) {
-                    double x = ((SpringNode) node).calcDistanceFromEquilibrium();
-                    ((SpringNode) node).launchProjectile();
+                    //double x = ((SpringNode) node).calcDistanceFromEquilibrium();
+                    double velMagnitude = node.physicsBody.vFromPEsToKEPEg(node, engine.groundNode);
+                    System.out.println("velMag: " + velMagnitude);
+                    ((SpringNode) node).launchProjectile(velMagnitude);
+
                 }
             }
         }
@@ -202,7 +205,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
                 adjustedPoint.y = mouseClickPos.y - (node.hitBox.height / 2);
 
                 if (node instanceof SpringNode) {
-                    if (((SpringNode) node).calcDistanceFromEquilibrium() <= 1000) {
+                    if (((SpringNode) node).calcDistanceFromEquilibrium() <= 120) {
                         node.nodePosition = adjustedPoint;
                     }
                 } else {

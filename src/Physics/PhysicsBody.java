@@ -72,6 +72,32 @@ public class PhysicsBody extends PhysicsWorld {
         }
     }
 
+    public double vFromPEsToKEPEg(Node node, Node groundNode) {
+        if (node instanceof SpringNode) {
+            double springDisplacement = 1;
+            if (((SpringNode) node).calcDistanceFromEquilibrium() > ((SpringNode) node).maxSpringDisplacement) {
+                springDisplacement = ((SpringNode) node).maxSpringDisplacement;
+            } else {
+                springDisplacement = (((SpringNode) node).calcDistanceFromEquilibrium());
+            }
+
+
+            double springConstant = ((SpringNode) node).SPRING_CONSTANT;
+            double projectileMass = ((SpringNode) node).projectileMass;
+            double height = groundNode.nodePosition.y - node.nodeCenterPosition.y;
+
+            System.out.println("k: " + springConstant + " x: " + springDisplacement + " mass: " + projectileMass + " height: " + height);
+
+
+            //double velocity = Math.sqrt((springConstant * springDisplacement * springDisplacement - 2 * projectileMass * 98 * height) / projectileMass);
+            double velocity = Math.sqrt((springConstant * springDisplacement * springDisplacement) / projectileMass);
+            System.out.println("velcoity: " + velocity);
+            return velocity;
+        } else {
+            return 0;
+        }
+    }
+
     //Called Specifically from the node and not this update method
     public void updateVelocity(Node node, int ticks) {
         if (node.name == "flower") {

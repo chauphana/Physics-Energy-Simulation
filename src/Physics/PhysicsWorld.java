@@ -3,6 +3,7 @@ package Physics;
 public class PhysicsWorld {
 
     public double gravity;
+    public double pixelsPerMeter = 10;
 
 
 

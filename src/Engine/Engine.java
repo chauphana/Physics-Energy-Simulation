@@ -17,9 +17,14 @@ public class Engine extends Canvas implements Runnable{
     public JFrame frame;
     public InputHandler inputHandler;
 
-    public ArrayList<Node> nodeList;
+    public final ArrayList<Node> nodeList;
 
     public SpringNode spring;
+    public Node groundNode;
+
+    public Node SpringPotentialBar;
+    public Node GravitationalPotentialBar;
+    public Node KineticBar;
 
     public Engine() {
 
@@ -68,19 +73,41 @@ public class Engine extends Canvas implements Runnable{
     public void createNodes() {
 
 
-        spring = new SpringNode("ball1.jpg", 100, 100, this);
+        groundNode = new Node(-300,550);
+        groundNode.physicsBody.categoryID = 2;
+        groundNode.color = Color.pink;
+        groundNode.hitBox.height = 50;
+        groundNode.hitBox.width = 1500;
+        nodeList.add(groundNode);
+
+        spring = new SpringNode("resources/Sling.png", 105, 499, this);
         spring.name = "spring";
+        spring.color = null;
+        spring .drawHitbox = false;
+        //spring.hitBox.width = 0;
+        //spring.hitBox.height = 0;
         nodeList.add(spring);
 
-        SpriteNode testNode1 = new SpriteNode("flower.png", 400, 300);
-        testNode1.name = "flower";
-        testNode1.physicsBody.isStatic = false;
-        nodeList.add(testNode1);
+        SpriteNode springSprite = new SpriteNode("resources/Slingshot.png", 100, 490);
+        springSprite.physicsBody.isStatic = true;
+        springSprite.color = null;
+        springSprite.drawHitbox = false;
+        springSprite.hitBox.width = 0;
+        springSprite.hitBox.height = 0;
+        nodeList.add(springSprite);
 
-        testNode1 = new SpriteNode("Earth.jpg", 600, 100);
-        testNode1.name = "earth";
-        testNode1.physicsBody.isStatic = false;
-        nodeList.add(testNode1);
+
+
+
+//        SpriteNode testNode1 = new SpriteNode("resources/flower.png", 400, 300);
+//        testNode1.name = "flower";
+//        testNode1.physicsBody.isStatic = false;
+//        nodeList.add(testNode1);
+//
+//        testNode1 = new SpriteNode("resources/Earth.jpg", 600, 100);
+//        testNode1.name = "earth";
+//        testNode1.physicsBody.isStatic = false;
+//        nodeList.add(testNode1);
 
         Node baseNode = new Node(400, 500);
         baseNode.name = "base";
@@ -90,12 +117,14 @@ public class Engine extends Canvas implements Runnable{
         nodeList.add(baseNode);
 
         baseNode = new Node(1100, 50);
-        baseNode.physicsBody.affectedByGravity = true;
+        baseNode.physicsBody.affectedByGravity = false;
         baseNode.name = "base2";
         baseNode.hitBox.width = 100;
         baseNode.hitBox.height  = 20;
         baseNode.physicsBody.isStatic = false;
         nodeList.add(baseNode);
+
+
 
 
     }
@@ -149,7 +178,7 @@ public class Engine extends Canvas implements Runnable{
              */
             if (System.currentTimeMillis() - lastTimer >= 1000) {
                 lastTimer += 1000;
-                System.out.println("Frames: " + frames + " Ticks: " + ticks);
+                //System.out.println("Frames: " + frames + " Ticks: " + ticks);
                 frames = 0;
                 ticks = 0;
             }
@@ -164,7 +193,6 @@ public class Engine extends Canvas implements Runnable{
                 item.nodePosition.y = 50;
                 item.physicsBody.yVelocity = 0;
             }
-
         }
         checkCollisions();
 
@@ -193,7 +221,7 @@ public class Engine extends Canvas implements Runnable{
 
     public void render(int ticks) {
         g = bs.getDrawGraphics();
-        g.setColor(Color.black);
+        g.setColor(Color.cyan);
         g.fillRect(0,0, WIDTH, HEIGHT);
         //g.setColor(Color.black);
 
