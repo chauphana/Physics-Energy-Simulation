@@ -11,20 +11,10 @@ import java.awt.event.*;
 
 public class InputHandler implements KeyListener, MouseListener, MouseMotionListener {
 
-    public boolean facingRight;
-    public boolean isWalking;
     public Point mouseClickPos;
     public Point mousePos;
-    public Point playerPos;
-    public Point slopePoint;
-    public Point cMoneyLoc;
-    public Point vaultLoc;
     public Node selectedNode;
-    public Boolean isDragging = false;
-
     public int index;
-
-
 
     private Engine engine;
     public Key up = new Key();
@@ -40,9 +30,6 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
         engine.addMouseMotionListener(this);
 
         this.mouseClickPos = new Point();
-
-        System.out.println("crated input handler");
-
     }
 
     public void keyPressed(KeyEvent e) {
@@ -63,11 +50,6 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     public void mouseClicked(MouseEvent e) {
         mouseClickPos = new Point(e.getX(), e.getY());
         System.out.println("Mouse Clicked at: " + e.getX() + ", " + e.getY());
-
-
-
-
-
     }
 
     public int getIndex() {
@@ -98,8 +80,6 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     public void mousePressed(MouseEvent e) {
         mouseClickPos = new Point(e.getX(), e.getY());
         System.out.println("Mouse Clicked at: " + e.getX() + ", " + e.getY());
-        //this.isDragging = true;
-        //clickedSpring(mouseClickPos);
 
         for (Node node : engine.nodeList) {
             if (node.hitBox.contains(mouseClickPos) && !node.physicsBody.isStatic) {
@@ -110,7 +90,6 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
                 node.isDragging = true;
             }
         }
-
     }
 
     public void mouseReleased(MouseEvent e) {
@@ -138,7 +117,6 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     }
 
     public void mouseExited(MouseEvent e) {
-
     }
 
     @Override
@@ -171,10 +149,6 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
     public void mouseMoved(MouseEvent e) {
         this.mousePos = new Point(e.getX(), e.getY());
     }
-
-
-
-
 }
 
 

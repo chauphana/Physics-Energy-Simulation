@@ -62,11 +62,6 @@ public class Node {
         if (this.drawHitbox) {
             g.fillRect(this.nodePosition.x, this.nodePosition.y,hitBox.width, hitBox.height);
         }
-
-        //g.fillRect(this.nodePosition.x, this.nodePosition.y,hitBox.width, hitBox.height);
-        //change fillRect to just Rect to have invis rectangle
-        //g.dispose();
-
     }
 
 

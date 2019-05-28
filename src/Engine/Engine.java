@@ -36,7 +36,7 @@ public class Engine extends Canvas implements Runnable{
         setMaximumSize(new Dimension(WIDTH, HEIGHT));
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
-        frame = new JFrame("Sim");
+        frame = new JFrame("Conservation of Energy Simulation");
         frame.setSize(new Dimension(800, 600));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(this);
@@ -217,6 +217,7 @@ public class Engine extends Canvas implements Runnable{
         g = bs.getDrawGraphics();
         //g.setColor(Color.cyan);
        // g.fillRect(0,0, WIDTH, HEIGHT);
+
         if (background != null) {
             g.drawImage(background,0,0, null);
         }

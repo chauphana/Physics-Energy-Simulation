@@ -71,6 +71,7 @@ public class SpringNode extends SpriteNode {
             node.physicsBody.updatePosWithVelocity(node);
             if (node.nodeCenterPosition.y > e.spring.nodeCenterPosition.y) {
                 projectileList.remove(node);
+
                 break;
             }
         }
@@ -83,25 +84,18 @@ public class SpringNode extends SpriteNode {
         g.drawLine(this.initialPosition.x, this.initialPosition.y, this.nodeCenterPosition.x, this.nodeCenterPosition.y);
         g.setColor(Color.black);
         g.drawString("Launch Angle: "+ Math.toDegrees(3.14 - this.angle), 22, 100);
-
-
-
+        if (this.calcDistanceFromEquilibrium() > maxSpringDisplacement) {
+            g.drawString("Displacement: "+ maxSpringDisplacement / 10 + "m", 22, 125);
+        } else {
+            g.drawString("Displacement: "+ this.calcDistanceFromEquilibrium() / 10 + "m", 22, 125);
+        }
 
         for (Node node : projectileList) {
             node.render(g);
         }
-
-
-        //g.setColor(Color.white);
-
-        //g.fillRect(400, 400, 300, 300);
-        //System.out.println("he");
-        //g.dispose();
-
     }
 
     public double calcDistanceFromEquilibrium() {
-
         if (e.inputHandler.selectedNode == this) {
             double xDifference = e.inputHandler.mouseClickPos.x - this.initialPosition.x;
             double yDifference = e.inputHandler.mouseClickPos.y - this.initialPosition.y;
@@ -111,21 +105,11 @@ public class SpringNode extends SpriteNode {
         } else {
             return 0;
         }
-
-
     }
 
     public void updateAngle() {
         if (this.isDragging) {
-            //System.out.println("mousePos: " + e.inputHandler.mouseClickPos.toString() + "initialPos: " + this.initialPosition.toString());
-            //System.out.println("mousePos: " + this.nodeCenterPosition.toString() + "initialPos: " + this.initialPosition.toString());
             this.angle = Math.atan2(this.nodeCenterPosition.y - this.initialPosition.y, this.nodeCenterPosition.x - this.initialPosition.x);
-//            System.out.println("dif: " + (this.nodeCenterPosition.y - this.initialPosition.y) + " " + (this.nodeCenterPosition.x - this.initialPosition.x));
-//            System.out.println( "deg: " + Math.toDegrees(this.angle));
-//            System.out.println(this.angle);
         }
-
     }
-
-
 }
