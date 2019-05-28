@@ -1,8 +1,13 @@
 package Engine;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import Nodes.*;
 
@@ -21,10 +26,9 @@ public class Engine extends Canvas implements Runnable{
 
     public SpringNode spring;
     public Node groundNode;
+    public BufferedImage background;
 
-    public Node SpringPotentialBar;
-    public Node GravitationalPotentialBar;
-    public Node KineticBar;
+
 
     public Engine() {
 
@@ -73,6 +77,15 @@ public class Engine extends Canvas implements Runnable{
     public void createNodes() {
 
 
+        try {
+            background = ImageIO.read(new FileInputStream("resources/raw background2.png"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         groundNode = new Node(-300,550);
         groundNode.physicsBody.categoryID = 2;
         groundNode.color = Color.pink;
@@ -109,20 +122,20 @@ public class Engine extends Canvas implements Runnable{
 //        testNode1.physicsBody.isStatic = false;
 //        nodeList.add(testNode1);
 
-        Node baseNode = new Node(400, 500);
-        baseNode.name = "base";
-        baseNode.hitBox.width = 10;
-        baseNode.hitBox.height  = 20;
-        baseNode.physicsBody.isStatic = false;
-        nodeList.add(baseNode);
-
-        baseNode = new Node(1100, 50);
-        baseNode.physicsBody.affectedByGravity = false;
-        baseNode.name = "base2";
-        baseNode.hitBox.width = 100;
-        baseNode.hitBox.height  = 20;
-        baseNode.physicsBody.isStatic = false;
-        nodeList.add(baseNode);
+//        Node baseNode = new Node(400, 500);
+//        baseNode.name = "base";
+//        baseNode.hitBox.width = 10;
+//        baseNode.hitBox.height  = 20;
+//        baseNode.physicsBody.isStatic = false;
+//        nodeList.add(baseNode);
+//
+//        baseNode = new Node(1100, 50);
+//        baseNode.physicsBody.affectedByGravity = false;
+//        baseNode.name = "base2";
+//        baseNode.hitBox.width = 100;
+//        baseNode.hitBox.height  = 20;
+//        baseNode.physicsBody.isStatic = false;
+//        nodeList.add(baseNode);
 
 
 
@@ -136,34 +149,22 @@ public class Engine extends Canvas implements Runnable{
 
         long lastTime = System.nanoTime();
         double nsecPerTick = 1000000000 / 20D; //  ticks per second as a double
-
         int ticks = 0;
         int frames = 0;
-
         long lastTimer = System.currentTimeMillis();
         double deltaTime = 0;
-
         while (running) {
 
             long now = System.nanoTime();
             deltaTime += (now - lastTime) / nsecPerTick;
             lastTime = now;
-
             boolean shouldRender = true;
-
             while (deltaTime >= 1) {
                 ticks++;
                 tick(ticks);
                 deltaTime -= 1;
                 shouldRender = true;
             }
-
-//			try {
-//				Thread.sleep(2);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
 
             if (shouldRender) {
                 frames++;
@@ -195,10 +196,6 @@ public class Engine extends Canvas implements Runnable{
             }
         }
         checkCollisions();
-
-
-
-
     }
 
     public void checkCollisions() {
@@ -216,23 +213,18 @@ public class Engine extends Canvas implements Runnable{
         }
     }
 
-
-
-
     public void render(int ticks) {
         g = bs.getDrawGraphics();
-        g.setColor(Color.cyan);
-        g.fillRect(0,0, WIDTH, HEIGHT);
-        //g.setColor(Color.black);
+        //g.setColor(Color.cyan);
+       // g.fillRect(0,0, WIDTH, HEIGHT);
+        if (background != null) {
+            g.drawImage(background,0,0, null);
+        }
 
 
+        renderEnergyBars();
 
-//        //System.out.println("i am painting");
-//        g.drawOval(50,50,10,10);
-//
-//        g.fillOval(0,0,50,50);
-//        g.setColor(Color.RED);
-        //int test = 0;
+
         for (Node item : nodeList) {
             //System.out.println(test);
             item.render(g);
@@ -246,5 +238,75 @@ public class Engine extends Canvas implements Runnable{
 
     }
 
+//    double maxPE = 0;
+//    double maxKE = 0;
+//    double maxHeight = 0;
+//    double lowestKE = 999999999;
+
+    public void renderEnergyBars() {
+        double KE = 0;
+        double PE = 0;
+        double height = 0;
+        
+
+        g.setColor(Color.black);
+
+        g.drawString("PEs: " + (int)spring.physicsBody.getSpringEnergy(spring), 22, 320);
+        g.setColor(Color.pink);
+        g.fillRect(30,300,50,-(int)spring.physicsBody.getSpringEnergy(spring) / 10);
+
+
+        if (spring.projectileList.size() > 0) {
+            int lastProjIndex = spring.projectileList.size() - 1;
+            int mass = (int)spring.projectileList.get(lastProjIndex).physicsBody.mass;
+            height = (spring.nodeCenterPosition.y - spring.projectileList.get(lastProjIndex).nodePosition.y) / 10; //CONVERTED TO METERS
+            g.drawString("HEIGHT: " + height, 400, 126);
+            PE =  mass * .49 * height;
+
+
+            //g.fillRect(170,300,50,-(int)PE/10);
+
+            double vMag = Math.sqrt(spring.projectileList.get(lastProjIndex).physicsBody.yVelocity * spring.projectileList.get(lastProjIndex).physicsBody.yVelocity + spring.projectileList.get(lastProjIndex).physicsBody.xVelocity * spring.projectileList.get(lastProjIndex).physicsBody.xVelocity);
+
+            KE = (.5 * spring.projectileList.get(lastProjIndex).physicsBody.mass * (vMag / 10) * (vMag / 10));
+
+            //PE -= KE;
+            g.setColor(Color.magenta);
+            g.fillRect(170,300,50,-(int)PE/10);
+            g.setColor(Color.red);
+            g.fillRect(100,300,50,-(int)KE/10);
+
+
+        }
+        //g.drawString("PE + KE: " + (PE + KE), 400, 150);
+
+        String formattedKE = String.format("%.00f", KE);
+        g.setColor(Color.black);
+        g.drawString("KE: " + formattedKE, 100, 320);
+        g.drawString("PEg: " + PE, 162, 320);
+
+//        if (KE > maxKE) {
+//            maxKE = KE;
+//        }
+//        if (KE < lowestKE && KE != 0) {
+//            lowestKE = KE;
+//        }
+//
+//        if (PE > maxPE) {
+//            maxPE = PE;
+//        }
+//        if (height > maxHeight) {
+//            maxHeight = height;
+//        }
+
+//        g.drawString("MAX KE" + maxKE, 800, 125);
+//
+//        g.drawString("MAX PE" + maxPE, 800, 150);
+//        g.drawString("MAX HEIGHT: " + maxHeight, 800, 175);
+//        g.drawString("LOWEST KE: " + lowestKE, 800, 200);
+
+
+
+    }
 
 }

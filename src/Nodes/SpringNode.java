@@ -9,7 +9,7 @@ public class SpringNode extends SpriteNode {
     public Engine e;
 
     public final int SPRING_CONSTANT = 30;
-    public int maxSpringDisplacement = 120;
+    public int maxSpringDisplacement = 100;
     public Point initialPosition;
     //public Boolean isDragging;
     public double angle;
@@ -32,10 +32,11 @@ public class SpringNode extends SpriteNode {
 
     public void launchProjectile(double velMagnitude) {
        double launchAngle = -this.angle;
-       Node projectile = new Node(this.initialPosition.x , this.initialPosition.y);
+       SpriteNode projectile = new SpriteNode("resources/rock.png",this.initialPosition.x - 15 , this.initialPosition.y + 15);
        projectile.hitBox.width = 30;
        projectile.hitBox.height = 30;
-       projectile.color = Color.blue;
+       projectile.color = null;
+       projectile.drawHitbox = false;
        projectile.physicsBody.categoryID = 1;
        projectile.physicsBody.velocity = velMagnitude;
        //projectile.physicsBody.yVelocity = 90;
@@ -49,6 +50,15 @@ public class SpringNode extends SpriteNode {
 
        projectileList.add(projectile);
 
+//       Node copy = projectile;
+//       copy.physicsBody.affectedByGravity = false;
+//       copy.physicsBody.isStatic = false;
+//       copy.nodePosition.x = 100;
+//        copy.nodePosition.y = 100;
+//        copy.physicsBody.xVelocity = 0;
+//        projectileList.add(copy);
+//        e.nodeList.add(copy);
+
     }
 
 
@@ -59,7 +69,7 @@ public class SpringNode extends SpriteNode {
         for (Node node : projectileList) {
             node.update(ticks);
             node.physicsBody.updatePosWithVelocity(node);
-            if (node.nodeCenterPosition.y > 600) {
+            if (node.nodeCenterPosition.y > e.spring.nodeCenterPosition.y) {
                 projectileList.remove(node);
                 break;
             }
@@ -71,8 +81,10 @@ public class SpringNode extends SpriteNode {
         super.render(g);
         g.setColor(Color.gray);
         g.drawLine(this.initialPosition.x, this.initialPosition.y, this.nodeCenterPosition.x, this.nodeCenterPosition.y);
-        g.setColor(Color.red);
-        g.drawString("angle: "+ Math.toDegrees(3.14 - this.angle), 700, 100);
+        g.setColor(Color.black);
+        g.drawString("Launch Angle: "+ Math.toDegrees(3.14 - this.angle), 22, 100);
+
+
 
 
         for (Node node : projectileList) {
@@ -89,11 +101,18 @@ public class SpringNode extends SpriteNode {
     }
 
     public double calcDistanceFromEquilibrium() {
-        double xDifference = e.inputHandler.mouseClickPos.x - this.initialPosition.x;
-        double yDifference = e.inputHandler.mouseClickPos.y - this.initialPosition.y;
-        double distance = Math.sqrt(xDifference * xDifference + yDifference * yDifference);
 
-        return distance;
+        if (e.inputHandler.selectedNode == this) {
+            double xDifference = e.inputHandler.mouseClickPos.x - this.initialPosition.x;
+            double yDifference = e.inputHandler.mouseClickPos.y - this.initialPosition.y;
+            double distance = Math.sqrt(xDifference * xDifference + yDifference * yDifference);
+
+            return distance;
+        } else {
+            return 0;
+        }
+
+
     }
 
     public void updateAngle() {

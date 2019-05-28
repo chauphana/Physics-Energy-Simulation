@@ -17,6 +17,7 @@ public class PhysicsBody extends PhysicsWorld {
     public double xVelocity;
     public double yVelocity;
 
+
     public int categoryID; //Numerical identifier for a node
     public ArrayList<Integer> contactIDs;
     public ArrayList<Integer> collisionIDs;
@@ -55,11 +56,7 @@ public class PhysicsBody extends PhysicsWorld {
     public void updatePosWithVelocity(Node node) {
         node.nodePosition.x += this.xVelocity;
         //node.nodePosition.y -= this.yVelocity;
-
     }
-
-
-
 
     public double gravityForce(Point initialPoint) {
         double finalY = initialPoint.y;
@@ -71,6 +68,22 @@ public class PhysicsBody extends PhysicsWorld {
             return initialPoint.y;
         }
     }
+
+    public double getSpringEnergy(SpringNode node) {
+        double springDisplacement;
+        //System.out.println(node.calcDistanceFromEquilibrium());
+        if (node.calcDistanceFromEquilibrium() > node.maxSpringDisplacement) {
+            springDisplacement = node.maxSpringDisplacement;
+        } else {
+            springDisplacement = node.calcDistanceFromEquilibrium();
+        }
+
+        springDisplacement /= 10; //Displacement is in pixels. 10 pixels = 1 meter
+        //System.out.println(springDisplacement);
+        return .5 * node.SPRING_CONSTANT * springDisplacement * springDisplacement;
+
+    }
+
 
     public double vFromPEsToKEPEg(Node node, Node groundNode) {
         if (node instanceof SpringNode) {

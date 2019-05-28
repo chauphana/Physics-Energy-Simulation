@@ -39,77 +39,25 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
         engine.addMouseListener(this);
         engine.addMouseMotionListener(this);
 
+        this.mouseClickPos = new Point();
+
         System.out.println("crated input handler");
 
     }
 
     public void keyPressed(KeyEvent e) {
         System.out.println(e.getKeyCode());
-        toggleKey(e.getKeyCode(), true);
+        //toggleKey(e.getKeyCode(), true);
     }
 
     public void keyReleased(KeyEvent e) {
         //engine.player.isWalking = false;
-        toggleKey(e.getKeyCode(), false);
+        //toggleKey(e.getKeyCode(), false);
     }
 
     public void keyTyped(KeyEvent arg0) {
     }
 
-    // public void checkInput() {
-    // /*
-    // * All if statements so it can handle
-    // * diagonal movement.
-    // */
-    // if (game.input.up.isPressed()) {
-    // game.player.y -= game.player.speed;
-    // }
-    // if (game.input.down.isPressed()) {
-    // game.player.y += game.player.speed;
-    // }
-    // if (game.input.left.isPressed()) {
-    // game.player.x -= game.player.speed;
-    // }
-    // if (game.input.right.isPressed()) {
-    // game.player.x += game.player.speed;
-    //
-    // }
-    // }
-
-    public void checkInput() {
-        //System.out.println(game.level.levelStage);
-        //System.out.println("pos; " + game.player.x + ", " + game.player.y);
-        if (this.up.isPressed()) {
-
-        }
-        if (this.down.isPressed()) {
-
-        }
-        if (this.left.isPressed()) {
-
-        }
-
-    }
-
-    public void toggleKey(int keyCode, boolean state) {
-
-        if (keyCode == KeyEvent.VK_W) {
-
-
-        }
-        if (keyCode == KeyEvent.VK_S) {
-
-        }
-        if (keyCode == KeyEvent.VK_A) {
-
-        }
-        if (keyCode == KeyEvent.VK_D) {
-
-        }
-        if (keyCode == KeyEvent.VK_SPACE) {
-
-        }
-    }
 
 
     public void mouseClicked(MouseEvent e) {
